@@ -1,0 +1,10 @@
+{
+  "name": "socket-econ-sim",
+  "version": "0.0.1",
+  "description": "Socket.io for multiplayer functionality and admin results page",
+  "dependencies": {
+    "express": "^4.15.2",
+    "socket.io": "^2.1.1",
+    "socket.io-client": "^2.1.1"
+  }
+}
