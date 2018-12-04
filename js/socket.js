@@ -120,15 +120,15 @@ io.on('connection', function(socket) {
         const leavingUser = user;
         // find correct gameObject by passed id and remove the specified user (remove gameObject)
         // in multi mode, one player leaving will also end game for opponent
-        for (var i = 0; i < gameCollection.totalGameCount; i++) {
-            if ((gameCollection.gameList[i]['singleGameObject'] && gameCollection.gameList[i]['singleGameObject']['groupId']==id)||(gameCollection.gameList[i]['multiGameObject'] && gameCollection.gameList[i]['multiGameObject']['groupId']==id)) {
-                gameCollection.gameList.splice(i,1);
-                gameCollection.totalGameCount--;
-                break;
-            }
-        }
+        // for (var i = 0; i < gameCollection.totalGameCount; i++) {
+        //     if ((gameCollection.gameList[i]['singleGameObject'] && gameCollection.gameList[i]['singleGameObject']['groupId']==id)||(gameCollection.gameList[i]['multiGameObject'] && gameCollection.gameList[i]['multiGameObject']['groupId']==id)) {
+        //         gameCollection.gameList.splice(i,1);
+        //         gameCollection.totalGameCount--;
+        //         break;
+        //     }
+        // }
         console.log(leavingUser+' is leaving!');
-        console.log(gameCollection);
+        // console.log(gameCollection);
         io.to(id).emit('gameExited', leavingUser);
     });
 

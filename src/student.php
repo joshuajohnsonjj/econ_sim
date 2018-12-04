@@ -1,9 +1,12 @@
 <?php
-/*
-index.php
+/* student.php
 
-Contains initial login form. On student login, index.php displays "enter session id" screen.
-On admin login, redirects to admin_page.php
+- index.php redirects here if user is a student
+- Prompts user to submit session id to join game
+- id validation is handled by utils/session.php
+- uses alertify to notify of events related to joining/leaving a game
+
+Last Update:
 */
 ini_set('display_errors', 1); error_reporting(-1); 
 include 'utils/sql_settup.php';
@@ -57,7 +60,7 @@ if ($USER->instructor)
 	<!-- MAIN CONTENT -->
 	<div id="mainContent">
 		<h3 style="margin: 80px auto auto; width: 300px; text-align: center; padding-bottom: 50px;">
-			<b style="font-weight: 500">Welcome, Student!</b>
+			<b style="font-weight: 550">Welcome, Student!</b>
 		</h3>
 		<div style="margin: 0 auto auto; width: 500px">
 			<h5 style="font-weight: 300">Enter Session ID to Begin: </h5>
@@ -84,15 +87,31 @@ if ($USER->instructor)
     <script src="../js/app.js"></script>
     <script type="text/javascript">
 
+    	// Deliver error messages for various events
     	if (window.location.search.includes("session=err2")) {
 			alertify.set('notifier','delay', 4);
 			alertify.set('notifier','position', 'top-center');
 			alertify.error('<i class="fas fa-exclamation-triangle"></i>  Your Opponent Quit!');
     	}
+    	else if (window.location.search.includes("session=err3")) {
+			alertify.set('notifier','delay', 4);
+			alertify.set('notifier','position', 'top-center');
+			alertify.error('<i class="fas fa-exclamation-triangle"></i>  Game Already Completed!');
+    	} 
     	else if (window.location.search.includes("session=err")) {
 			alertify.set('notifier','delay', 4);
 			alertify.set('notifier','position', 'top-center');
 			alertify.error('<i class="fas fa-exclamation-triangle"></i>  Error! Session Doesn\'t Exist.');
+    	}
+    	else if (window.location.search.includes("session=left")) {
+			alertify.set('notifier','delay', 4);
+			alertify.set('notifier','position', 'top-center');
+			alertify.warning('<i class="fas fa-exclamation-triangle"></i>  You Left The Game!');
+    	}
+    	else if (window.location.search.includes("session=comp")) {
+			alertify.set('notifier','delay', 4);
+			alertify.set('notifier','position', 'top-center');
+			alertify.success('<i class="fas fa-thumbs-up"></i>  Game Complete!');
     	}
 
     	function enterGame() {
@@ -154,13 +173,13 @@ if ($USER->instructor)
   		margin-top: 16%;
   	}
 	.grid-container { filter: blur(10px); }
-	#mainContent { min-height: calc(100vh - 319px); }
+	#mainContent { min-height: calc(100vh - 293px); }
 	.footer {
 		background-color: #0a4c6d;
-		height: 100px;
+		height: 75px;
 	}
 	.footer, .push {
-		height: 100px;
+		height: 75px;
 	}
 	#login_modal {
 		outline: none;

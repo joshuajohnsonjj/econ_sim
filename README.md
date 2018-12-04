@@ -1,207 +1,47 @@
-
-TSUGI PHP Standalone Sample
-===========================
-
-This is a component of the [Tsugi PHP Project](https://github.com/csev/tsugi).
-
-There are two ways to use the Tsugi library/framework:
-
-* You can use Tsugi like a library and add it to a few places in 
-an existing application.  This repository contains 
-sample code showing how to use Tsugi as a library in an 
-existing application.
-
-* You can also build a "Tsugi Module" from scratch following all of the
-Tsugi style guidance, using the Tsugi browser environment, and
-making full use of the Tsugi framework.
-We also have starting code for
-[Bulding a Tsugi Module](https://github.com/csev/tsugi-php-module)
-
-Both of these approaches depend on the
-[Tsugi Devloper/Admin Console](https://github.com/csev/tsugi)
-for database configuration, setup, developer test harness,
-CASA support, Content Item Support, etc.
-
-Setup/Configuration
--------------------
-
-You need to download and install the 
-[Tsugi Developer/Administrator Console](https://github.com/csev/tsugi)
-to be able to setup database tables, test your software, and configure 
-your keys.   Once things are setup - end-users or teachers do not need 
-access to the Tsugi application unless yuo want to let them apply for 
-keys.
-
-Once that is installed, you can download this software:
-
-    https://github.com/csev/tsugi-php-standalone
-
-The software comes with a `config.php` that assumes it this program is
-installed in the same htdocs folder as the Tsugi Console.  This is a 
-quick way to get this program up and running for testing and exploration.
-A key element of the configuration is to include this line as part
-of the configuration to indicate to Tsugi that we are using
-cookie-based sessions.
-
-    if ( !defined('COOKIE_SESSION') ) define('COOKIE_SESSION', true);
-
-If you have the Tsugi management console running on the same server,
-you can make it so developer mode can test this application by updating
-the tool folder list:
-
-    $CFG->tool_folders = array("admin", "samples", ... ,
-        "exercises", "../tsugi-php-standalone");
-
-With that the tool will be easily testable from the Tsugi management
-console.
-
-If for production purposes, you need to run your application on a server
-without installing the Tsugi management console, see the more advanced
-configuration instructions below.
-
-How Tsugi Uses Session
-----------------------
-
-if you look at `index.php`, you will see these three lines:
-
-    require_once "config.php";
-    use \Tsugi\Core\LTIX;
-
-    $LAUNCH = LTIX::session_start();
-
-This functions as an LTI-aware `session_start()` and can be a drect replacement
-for `session_start()` in any of your PHP files.  In addition to starting the 
-session the LTIX version of `session_start()` does the following:
-
-* Intercepts any LTI launch POSTs, validates them, updates the `lti_` database tables,
-adds some LTI data to the session, and then redirects to a GET of the same URL.
-
-* If the request is not an LTI launch (or a GET after LTI Launch POST), it looks in 
-the session to see if there is LTI data in the session and populates the $LAUNCH object 
-with as much of the User, Context, Link, and Result information as it can find.
-
-Your code must not assume that these values are always set since there might be
-more than one way to enter the application.  So code that might send a grade back 
-needs to protect itself and only call routines if sufficient LTI data is present.
-
-    if ( isset($LAUNCH->result) ) {
-        $LAUNCH->result->gradeSend(0.95);
-    }
-
-Limitations of Cookie-Based Sessions
-------------------------------------
-
-In standalone model, we will use cookies to manage the sessions.   Using cookies
-limits the ability to embed the application in an iframe across two domains.
-It also means that a single PHPSESSID value will exist for all non-incognito
-windows and so if you do a launch on one tab as one user from a course
-and then do another launch in a different tab as a different user from a different
-course, the login settings will be changed in the first tab since they are 
-sharing a PHP session across tabs.
-
-This also means that these applications should be launched from the LMS in 
-a new window and not embedded in an iframe.
-
-The ablility to have multiple simultaneous sessions and work seamlessly in an 
-iframe is one of the reasons that a lot of effort goes into using non-cookie
-sessions in Tsugi Modules.  But since there are so many
-existing applications that need an LTI integreation that cannot be rewritten,
-we accept these limitations in our Tsugi standalone approach.
-
-Virtually all of the older LTI integrations based on `lti_util.php` or a similar
-pattern have these exact same limitations since they use cookie-based sessions.
-
-Tsugi Developer List
---------------------
-
-Once you start developing Tsugi Applications or Modules, you should join the Tsugi
-Developers list so you can get announcements when things change.
-
-    https://groups.google.com/a/apereo.org/forum/#!forum/tsugi-dev
-
-Once you have joined, you can send mail to tsugi-dev@apereo.org
-
-Advanced Installation
----------------------
-
-If you are going to install this tool in a web server that does not
-already have an installed copy of the Tsugi management console,
-it is a bit trickier.  There is no automatic connection between Tsugi developer 
-tools and Tsugi admin tools won't know about this tool.   
-But it can run stand alone.
-
-First install composer to include dependencies.
-
-    http://getcomposer.org/
-
-I just do this in the folder:
-
-    curl -O https://getcomposer.org/composer.phar
-
-Get a copy of the latest `composer.json` file from the 
-[Tsugi repository](https://github.com/csev/tsugi)
-or a recent Tsugi installation and copy it into this folder.
-
-To install the dependencies into the `vendor` area, do:
-
-    php composer.phar install
-
-If you want to upgrade dependencies (perhaps after a `git pull`) do:
-
-    php composer.phar update
-
-Note that the `composer.lock` file and `vendor` folder are 
-both in the `.gitignore` file and so they won't be checked into
-any repo.
-
-For advanced configuation, you need to retrieve a copy of 
-`config-dist.php` from the 
-[Tsugi repository](https://github.com/csev/tsugi)
-or a copy of `config.php`
-from a Tsugi install and place the file in this folder.
-
-Then you will need to configure the database connection, etc for this
-application by editing `config.php`.  
-
-A key element of the configuration is to include this line as part
-of the configuration to indicate to the Tsugi run-time that we 
-are using cookie-based sessions.
-
-    if ( !defined('COOKIE_SESSION') ) define('COOKIE_SESSION', true);
-
-The `config-dist.php` has a configuration line commented out to 
-serve as an example.
-
-Running (Advanced Configuration)
---------------------------------
-
-Once it is installed and configured, you can do an LTI launch to
-
-    http://localhost:8888/tsugi-php-standalone/index.php
-    key: 12345
-    secret: secret
-
-You can use your Tsugi installation or my test harness at:
-
-    https://online.dr-chuck.com/sakai-api-test/lms.php
-
-And it should work!
-
-Upgrading the Library Code (Advanced Configuration)
----------------------------------------------------
-
-From time to time the library code in
-
-    https://github.com/csev/tsugi-php
-
-Will be upgraded and pulled into Packagist:
-
-    https://packagist.org/packages/tsugi/lib
-
-To get the latest version from Packagist, edit `composer.json` and
-update the commit hash to the latest hash on the `packagist.org` site
-and run:
-
-    php composer.phar update
-
-
+# Simulator App
+This program is a web based simulator app currently designed to be an educational aid for economics courses, with the potential for future additions to support other business related courses.
+
+## Overview
+The program currently supports the 4 market structures: Monopoly, Oligopoly, Monopolistic Competition, Perfect Competition.
+
+Monopoly mode is a single player game in which students have one input option (production output), which entirely determines the outcome. Oligopoly is a 2-player game. Students are paired with each other as they enter the game, and they each make one decision (production output), which determines the outcome. Monopolistic Competition is single player, but has several difficulty options which determine how many decisions a student will make. Perfect Competition is single player and has two difficulty options.
+
+Instructors have dedicated UI for creating games, starting/stopping sessions, and viewing real time results as a game session ensues.  
+
+## Files
+An outline of the files necessary to understand the essential functionality of the application.
+#### File Map: 
+- Begin index.php
+	- Instructors to src/admin_page.php
+		- To src/results.php
+	- Students to student.php
+		- Monopoly and Oligopoly market structures to src/game_main.php
+		- Monopolistic Competition to src/monopolistic_game.php
+		- Perfect Competition to src/perfect_game.php
+#### File Descriptions:
+* _index.php_ &rarr; Initially gets LTI info and redirects user to appropriate UI based on student/instructor status
+* _src/socket/start.php_ &rarr; script called to start server for socket
+* _src/socket/start_io.php_ &rarr; handles backend of socket set up - listens for emissions from client
+* _src/socket/start_web.io_ &rarr; Starts up server
+* _src/utils/add_course.php_ &rarr; Handles mysql queries for adding/deleting a course on instructor side
+* _src/utils/game_util.php_ &rarr; Handles mysql queries for adding/deleting/updating a game inside a course on instructor side
+* _src/utils/session.php_ &rarr; Handles mysql queries related to a game session, including trying to enter a game, toggling game on/offline (instructor side), updating session data when student submits for a round, removing a student if he/she quits, and retrieving the session game data for instructor's results page
+* _src/utils/sql_settup.php_ &rarr; Contains queries to initially set up the necessary mysql tables, as well as several general helper functions to return certain data from these tables
+* _src/admin_page.php_ &rarr; Contains UI for the instructor side. Starts in course view, allows for selecting saved course or creating new one.&rarr;Goes to games view, displaying saved games inside of a given course and allows for creation of new game as well as deletion of the parent course which will also delete all games in course&rarr;Goes to individual game view, containing options to start/stop session, view results, edit game, and delete game
+* _src/game_main.php_ &rarr; Contains set up for monopoly and oligopoly games. Uses ajax to get/send info to mysql tables. Oligopoly utilizes socket io to communicate with opponent
+* _src/monopolistic_game.php_ &rarr; Contains set up for monopolistic competition games
+* _src/perfect_game.php_ &rarr; Set up for perfect competition game
+* _src/results.php_ &rarr; Displays results from current game session to instructor in real time. Has tab to display average values of all students from each year on chart. Has tab to display individual values on table, with ability to select up to 2 students to compare graphically
+* _src/student.php_ &rarr; Initial page student will see. All they can do from here is enter session id given to them by instructor in order to redirect to game screen
+
+
+
+## Libraries/Frameworks Utilized
+Several libraries and frameworks were utilized for some of the specialized features of the application:
+* [Chartjs](https://www.chartjs.org/) - Javascript library used for creating the numerous responsive graphs throughout the gameplay as well as on the instructor results page
+* [Datatables](https://datatables.net/) - A JQuery Javascript library utilized to create the table displaying individual student game data on the instructor results page
+* [Alertifyjs](https://alertifyjs.com/) - A Javascript library used to provide notifications for certain error events related to gameplay or joining/leaving game sessions
+* [Animate.css](https://daneden.github.io/animate.css/) - CSS animation library used for various embellishments throughout, i.e. reveal animations for graphs
+* [Socket.io](https://socket.io/) - Javascript library used for bi-directional communication to enable multiplayer and real-time updates for instructor. Implemented in php as based on [this](https://github.com/walkor/phpsocket.io) repository.
+* [Foundation](https://foundation.zurb.com/sites/docs/kitchen-sink.html#0) - The framework used as basis for front end design
+* [Tsugi](https://tsugi.org/) - Framework used for LTI connection

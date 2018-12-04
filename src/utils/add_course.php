@@ -1,10 +1,10 @@
 <?php
-/*
-add_course.php
+/* add_course.php
 
-Contains code for adding a new course to mysql database, as well as deleting existing
+- handles adding a new course to mysql database, as well as deleting existing
+
+Last Update:
 */
-
 ini_set('display_errors', 1); error_reporting(-1);
 include 'sql_settup.php';
 require_once "../../../tsugi/config.php";
@@ -13,7 +13,8 @@ use \Tsugi\Core\LTIX;
 
 $LAUNCH = LTIX::session_start();
 
-if (isset($_POST['name']) && isset($_POST['section']) && isset($_POST['avatar'])) { // Add new course
+// Add new course
+if (isset($_POST['name']) && isset($_POST['section']) && isset($_POST['avatar'])) { 
 
 	$add_course_sql = "INSERT INTO Courses (name, section, owner, avatar) VALUES ('".$_POST['name']."', '".$_POST['section']."', '".$USER->email."', '".$_POST['avatar']."')";
 
