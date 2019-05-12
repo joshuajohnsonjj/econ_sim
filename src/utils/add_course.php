@@ -6,25 +6,27 @@
 Last Update:
 */
 ini_set('display_errors', 1); error_reporting(-1);
-include 'sql_settup.php';
+// include 'sql_settup.php';
 require_once "../../../tsugi/config.php";
+require_once('../../dao/QW_DAO.php');
 
 use \Tsugi\Core\LTIX;
+use \QW\DAO\QW_DAO;
 
 $LAUNCH = LTIX::session_start();
 
+$p = $CFG->dbprefix;
+$QW_DAO = new QW_DAO($PDOX, $p);
+
+
 // Add new course
 if (isset($_POST['name']) && isset($_POST['section']) && isset($_POST['avatar'])) { 
-
-	$add_course_sql = "INSERT INTO Courses (name, section, owner, avatar) VALUES ('".$_POST['name']."', '".$_POST['section']."', '".$USER->email."', '".$_POST['avatar']."')";
-
-	if ($mysqli->query($add_course_sql) === TRUE) 
-		header("Location: ../../src/admin_page.php");
-	else 
-	    echo "Error: " . $sql . "<br>" . $mysqli->error;
+	$QW_DAO->addCourse($USER->email, $_POST['name'], $_POST['section'],$_POST['avatar']);
 }
-	// Delete existing course
+	// Delete existing course and its games
 else { 
+	$QW_DAO->addCourse($_POST['nadeleteIdme']
+	
 	$delete_sql = "DELETE FROM Courses WHERE id=".$_POST['deleteId'];
 
 	// Delete the course

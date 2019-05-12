@@ -25,7 +25,7 @@ $OUTPUT->header();
 if ($USER->instructor)
 	header("Location: ..");
 
-$gameInfo = getGameInfo($mysqli, (int)$_GET['session']);
+$gameInfo = getGameInfo((int)$_GET['session']);
 ?>
 
 <!doctype html>
@@ -924,6 +924,14 @@ $gameInfo = getGameInfo($mysqli, (int)$_GET['session']);
 	  	getResults(quantity, prodLevel);
 	}
 
+	// Helper function for economic calculations. Accepts a mean and std deviation and returns rand num
+	function random(m, s) {
+	  return m + 2.0 * s * (Math.random() + Math.random() + Math.random() - 1.5);
+	}
+	// Returns random number between 1 and 5, determening if shock will occur
+	function getRandomArbitrary() {
+	    return (Math.random() * (6 - 1) + 1).toPrecision(1);
+	}
 
 	// =================
 	// //CHARTS SET UP\\
@@ -1044,7 +1052,7 @@ $gameInfo = getGameInfo($mysqli, (int)$_GET['session']);
 			            borderWidth: 0,
 			            label: {
 			              backgroundColor: "red",
-			              content: "You Entered Market on Year 1",
+			              content: "You Entered Market in Year 1",
 			              enabled: true,
 			              xAdjust: -80,
 			            }

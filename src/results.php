@@ -25,7 +25,7 @@ if (!$USER->instructor)
 
 $selectedGame = $_GET['game'];
 
-$gameInfo = getGameInfo($mysqli, (int)$selectedGame);
+$gameInfo = getGameInfo((int)$selectedGame);
 ?>
 
 <!doctype html>

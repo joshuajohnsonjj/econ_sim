@@ -22,7 +22,7 @@ $LAUNCH = LTIX::session_start();
 $OUTPUT->header();
 
 // get the current games set up info
-$gameInfo = getGameInfo($mysqli, (int)$_GET['session']);
+$gameInfo = getGameInfo((int)$_GET['session']);
 $startGame = true;
 
 // if multi mode (oligopoly) do not immediately start game - must wait to be matched with another player

@@ -8,7 +8,6 @@ admin_page.php
 
 Initially displays courses view. This view displays an instructors saved courses and allows for creating new saved course. Clicking into course goes to games view. This view displays the saved games within a course and allows for 1) creating new saved game within course, 2) deleting the course which in turn deletes all contained games and sends user back to courses view. Clicking into game goes to individual game view. Three options are shown at any point. The first is a toggle switch to start/stop session - this toggles the ability for students to be able to enter into the game and play it. Starting the session will display an id which is to be given to students to join the game. Stopping the session will end ability to join the game and clear the game's data. The second button is dynamic. When session is not live, it is the "Game Setup" button which allows user to view current game configuration as well as make updates and save them. When session is live, it is "View Results" button which redirects to results.php. The third is a delete button which deletes the current game.
 
-Last Update:
 */
 	ini_set('display_errors', 1); error_reporting(-1); 
 	include 'utils/sql_settup.php';
@@ -30,15 +29,15 @@ Last Update:
 	// if neither course nor game in query string, show courses view
 	// call func from sql_settup to get the instructor's saved courses
 	if (!isset($_GET['course']) && !isset($_GET['game']))	
-		$courses = getCourses($mysqli, $USER->email);
+		$courses = getCourses($USER->email);
 	
 	// if course in query string, show games view
 	// get current course name using course id in query and get course's games to list on screen
 	if (isset($_GET["course"])) {
-		$selectedCourse = getCourseNameSection($mysqli, $_GET["course"]);
+		$selectedCourse = getCourseNameSection($_GET["course"]);
 		$selectedCourseName = $selectedCourse[0];
 		$selectedCourseSection = $selectedCourse[1];
-		$games = getGames($mysqli, $_GET["course"]);
+		$games = getGames($_GET["course"]);
 	}
 
 	// if game is in querystring, show individual game view
@@ -49,8 +48,8 @@ Last Update:
 
 	// get the details of the selected game and check if it is toggled on/off
 	if ($selectedGame) {
-		$gameInfo = getGameInfo($mysqli, (int)$selectedGame);
-		$sessionRunning = sessionIsLive($mysqli, $gameInfo['id']);
+		$gameInfo = getGameInfo((int)$selectedGame);
+		$sessionRunning = sessionIsLive($gameInfo['id']);
 	}
 
 	// different icons for the different types of available games

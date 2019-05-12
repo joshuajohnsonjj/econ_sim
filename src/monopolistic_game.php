@@ -26,7 +26,7 @@ $OUTPUT->header();
 if ($USER->instructor)
 	header("Location: ..");
 
-$gameInfo = getGameInfo($mysqli, (int)$_GET['session']);
+$gameInfo = getGameInfo((int)$_GET['session']);
 ?>
 
 <!doctype html>

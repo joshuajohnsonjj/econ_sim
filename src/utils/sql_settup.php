@@ -11,26 +11,26 @@ Last Update:
 Add Sessions table 
 */
 
-DEFINE('DB_USERNAME', 'root');
-DEFINE('DB_PASSWORD', 'root');
-DEFINE('DB_HOST', 'localhost');
-DEFINE('DB_DATABASE', 'econ_sim_data');
+// DEFINE('DB_USERNAME', 'root');
+// DEFINE('DB_PASSWORD', 'root');
+// DEFINE('DB_HOST', 'localhost');
+// DEFINE('DB_DATABASE', 'econ_sim_data');
 
-$mysqli = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
+// $mysqli = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
-if (mysqli_connect_error()) {
-	die('Connect Error ('.mysqli_connect_errno().') '.mysqli_connect_error());
-}
+// if (mysqli_connect_error()) {
+// 	die('Connect Error ('.mysqli_connect_errno().') '.mysqli_connect_error());
+// }
 
 // INITIALIZES TABLES
 // =======================
 // $coursetbl = "CREATE TABLE Courses (
-// 	id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-// 	name VARCHAR(30) NOT NULL,
-// 	section VARCHAR(30) NOT NULL,
-// 	owner VARCHAR(30) NOT NULL,
-// 	avatar VARCHAR(30) DEFAULT 'fa-chart-bar',
-// 	reg_date TIMESTAMP
+	// id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	// name VARCHAR(30) NOT NULL,
+	// section VARCHAR(30) NOT NULL,
+	// owner VARCHAR(30) NOT NULL,
+	// avatar VARCHAR(30) DEFAULT 'fa-chart-bar',
+	// reg_date TIMESTAMP
 // )";
 // if ($mysqli->query($coursetbl) === TRUE) {
 // 	echo "make courses table success";
@@ -39,25 +39,25 @@ if (mysqli_connect_error()) {
 // }
 // // gamestbl contains setup info for all created games
 // $gamestbl = "CREATE TABLE Games (
-// 	id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-// 	name VARCHAR(30) NOT NULL,
-//  	live BOOLEAN DEAFAULT FALSE,
-// 	type VARCHAR(30) NOT NULL,
-// 	course_id VARCHAR(30) NOT NULL,
-// 	difficulty VARCHAR(30) NOT NULL,
-// 	mode VARCHAR(30) NOT NULL,
-// 	market_struct VARCHAR(30) NOT NULL,
-// 	macro_econ	VARCHAR(30) NOT NULL,
-// 	rand_events BOOLEAN NOT NULL,
-// 	time_limit INT(6) NOT NULL,
-// 	num_rounds INT(6) NOT NULL,
-// 	demand_intercept INT(6) NOT NULL,
-// 	demand_slope INT(6) NOT NULL,
-// 	fixed_cost INT(6) NOT NULL,
-// 	const_cost INT(6) NOT NULL,
-// 	equilibrium INT(6) DEFAULT NULL,
-//  price_hist 	VARCHAR(300) 	DEFAULT NULL,
-// 	reg_date TIMESTAMP
+	// id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	// name VARCHAR(30) NOT NULL,
+ // 	live BOOLEAN DEAFAULT FALSE,
+	// type VARCHAR(30) NOT NULL,
+	// course_id VARCHAR(30) NOT NULL,
+	// difficulty VARCHAR(30) NOT NULL,
+	// mode VARCHAR(30) NOT NULL,
+	// market_struct VARCHAR(30) NOT NULL,
+	// macro_econ	VARCHAR(30) NOT NULL,
+	// rand_events BOOLEAN NOT NULL,
+	// time_limit INT(6) NOT NULL,
+	// num_rounds INT(6) NOT NULL,
+	// demand_intercept INT(6) NOT NULL,
+	// demand_slope INT(6) NOT NULL,
+	// fixed_cost INT(6) NOT NULL,
+	// const_cost INT(6) NOT NULL,
+	// equilibrium INT(6) DEFAULT NULL,
+ // price_hist 	VARCHAR(300) 	DEFAULT NULL,
+	// reg_date TIMESTAMP
 // )";
 // if ($mysqli->query($gamestbl) === TRUE) {
 // 	echo "make games table success";
@@ -66,18 +66,18 @@ if (mysqli_connect_error()) {
 // }
 // // gameSessionData contains data all current or finished game sessions (one entry for each player)
 // $gameSessionData = "CREATE TABLE GameSessionData (
-// 	id 					INT(6)			UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-// 	complete 			BOOLEAN			DEFAULT FALSE,
-// 	groupId				VARCHAR(10)		NOT NULL,
-// 	player 				VARCHAR(30) 	NOT NULL,
-// 	opponent 			VARCHAR(30) 	DEFAULT NULL,
-// 	player_quantity 	VARCHAR(300) 	NOT NULL,
-// 	player_profit 		VARCHAR(300) 	NOT NULL,
-// 	player_revenue 		VARCHAR(300) 	NOT NULL,
-// 	player_return 		VARCHAR(300) 	NOT NULL,
-// 	price 				VARCHAR(300)	NOT NULL,
-// 	unit_cost 			VARCHAR(300)	NOT NULL,
-// 	total_cost			VARCHAR(300)	NOT NULL
+	// id 					INT(6)			UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	// complete 			BOOLEAN			DEFAULT FALSE,
+	// groupId				VARCHAR(10)		NOT NULL,
+	// player 				VARCHAR(30) 	NOT NULL,
+	// opponent 			VARCHAR(30) 	DEFAULT NULL,
+	// player_quantity 	VARCHAR(300) 	NOT NULL,
+	// player_profit 		VARCHAR(300) 	NOT NULL,
+	// player_revenue 		VARCHAR(300) 	NOT NULL,
+	// player_return 		VARCHAR(300) 	NOT NULL,
+	// price 				VARCHAR(300)	NOT NULL,
+	// unit_cost 			VARCHAR(300)	NOT NULL,
+	// total_cost			VARCHAR(300)	NOT NULL
 // 	)";
 // if ($mysqli->query($gameSessionData) === TRUE) {
 // 	echo "make gameSessionData success";
@@ -86,11 +86,11 @@ if (mysqli_connect_error()) {
 // }
 // // Sessions contains all live game sessions
 // $sessions = "CREATE TABLE Sessions (
-// 	id 					INT(6)			UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-// 	groupId				VARCHAR(10)		NOT NULL,
-//	gameId 				Int(6)			NOT NULL,
-// 	p1 					VARCHAR(30) 	DEFAULT NULL,
-//	p1Data 				INT(20)			DEFAULT NULL,
+	// id 					INT(6)			UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+	// groupId				VARCHAR(10)		NOT NULL,
+	// gameId 				Int(6)			NOT NULL,
+	// p1 					VARCHAR(30) 	DEFAULT NULL,
+	// p1Data 				INT(20)			DEFAULT NULL,
 // 	)";
 // if ($mysqli->query($sessions) === TRUE) {
 // 	echo "make Sessions success";
@@ -99,72 +99,72 @@ if (mysqli_connect_error()) {
 // }
 // =======================
 
+require_once('../../dao/QW_DAO.php');
 
-// UTILITY FUNCTIONS
-// =================
+use \QW\DAO\QW_DAO;
+
+$p = $CFG->dbprefix;
+$QW_DAO = new QW_DAO($PDOX, $p);
+
 // Get instructor's saved courses from Courses table
-function getCourses($mysqli, $usr) {
-	$result = $mysqli->query("SELECT * FROM Courses");
-	$courses = [];
+function getCourses($usr) {
+	$response = $QW_DAO->geCourses($usr);
 
-	if($result === FALSE)
-		die("ERROR! Can't get courses."); 
-
-	if ($result->num_rows > 0)
-		while ($row = $result->fetch_assoc())
-			if ($usr == $row["owner"])
-				array_push($courses, $row);
-	return $courses;
+	return $response;
 }
 
 // for games screen get course name and section
-function getCourseNameSection($mysqli, $id) {
-	$result = $mysqli->query("SELECT name, section FROM Courses WHERE id=".$id);
+function getCourseNameSection($id) {
+	$response = $QW_DAO->getCourseNameSection($id);
 	$info = [];
 
-	if($result === FALSE)
+	if($response === FALSE)
 		die("ERROR! Can't get course info."); 
 
-	if ($result->num_rows > 0) {
-		$row = $result->fetch_assoc();
-		array_push($info, $row['name']);
-		array_push($info, $row['section']);
+	if ($response) {
+		array_push($info, $response['name']);
+		array_push($info, $response['section']);
 	}
+
 	return $info;
 }
 
 // get course's saved games & info
 // --------------
-function getGames($mysqli, $course) {
+function getGames($course) {
+	$response = $QW_DAO->getGames($course);
 	// return the games contained by a specified course
-	$result = $mysqli->query("SELECT * FROM Games");
-	$games = [];
+	// $result = $mysqli->query("SELECT * FROM Games");
+	// $games = [];
 
-	if($result === FALSE)
-		die("ERROR! Can't get games."); 
+	// if($result === FALSE)
+	// 	die("ERROR! Can't get games."); 
 
-	if ($result->num_rows > 0)
-		while ($row = $result->fetch_assoc())
-			if ($course == $row["course_id"])
-				array_push($games, $row);
-	return $games;
+	// if ($result->num_rows > 0)
+	// 	while ($row = $result->fetch_assoc())
+	// 		if ($course == $row["course_id"])
+	// 			array_push($games, $row);
+
+	return $response;
 }
 
 // return the details for a specified game
-function getGameInfo($mysqli, $game) {
-	$result = $mysqli->query('SELECT * FROM Games WHERE id='.$game);
+function getGameInfo($game) {
+	$response = $QW_DAO->getGameInfo($game);
+	// $result = $mysqli->query('SELECT * FROM Games WHERE id='.$game);
+	return $response;
+	// if($result === FALSE)
+	// 	die("ERROR! Can't get game info."); 
 
-	if($result === FALSE)
-		die("ERROR! Can't get game info."); 
-
-	if ($result->num_rows > 0) {
-		$row = $result->fetch_assoc();
-		return $row;
-	}
+	// if ($result->num_rows > 0) {
+	// 	$row = $result->fetch_assoc();
+	// 	return $row;
+	// }
 }
 // ---------------
 
 // return boolean - game session is "live" (joinable by students) or not 
-function sessionIsLive($mysqli, $id) {
-	return $mysqli->query('SELECT live FROM Games WHERE id="'.$id.'" LIMIT 1')->fetch_assoc()['live'];
+function sessionIsLive($id) {
+	// return $mysqli->query('SELECT live FROM Games WHERE id="'.$id.'" LIMIT 1')->fetch_assoc()['live'];
+	return $QW_DAO->sessionIsLive($id);
 }
