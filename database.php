@@ -23,7 +23,7 @@ $DATABASE_INSTALL = array(
         "create table {$CFG->dbprefix}games (
     id INT(6) UNSIGNED AUTO_INCREMENT,
     name VARCHAR(30) NOT NULL,
-    live BOOLEAN DEAFAULT FALSE,
+    live BOOLEAN DEFAULT FALSE,
     type VARCHAR(30) NOT NULL,
     course_id VARCHAR(30) NOT NULL,
     difficulty VARCHAR(30) NOT NULL,
