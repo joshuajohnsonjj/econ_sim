@@ -103,7 +103,7 @@ class QW_DAO {
             $this->PDOX->rowDie($query, $arr);
         } else {
             $query = "INSERT INTO {$this->p}gameSessionData (groupId, gameId, player, opponent, player_quantity, player_revenue, player_profit, player_return, price, unit_cost, total_cost) VALUES (:grpId, :gmId, :usr, :opp, :quantity, :revenue, :profit, :return, :price, :unitCost, :ttlCost)";
-            $arr = array(':grpId' => $groupId, ':usr'=>$username ':opp'=>$opponent, ':quantity'=>$quantity, ':revenue'=>$revenue, ':profit'=>$profit, ':return'=>$percentReturn, ':price'=> $price, ':unitCost'=>$unitCost, ':ttlCost'=>$totalCost, ':complete'=>$complete,':gmId'=>$gameId);
+            $arr = array(':grpId' => $groupId, ':usr'=>$username, ':opp'=>$opponent, ':quantity'=>$quantity, ':revenue'=>$revenue, ':profit'=>$profit, ':return'=>$percentReturn, ':price'=> $price, ':unitCost'=>$unitCost, ':ttlCost'=>$totalCost, ':complete'=>$complete,':gmId'=>$gameId);
             $this->PDOX->rowDie($query, $arr);
         }
     }

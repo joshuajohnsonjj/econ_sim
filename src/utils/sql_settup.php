@@ -99,7 +99,9 @@ Add Sessions table
 // }
 // =======================
 
-require_once('../../dao/QW_DAO.php');
+global $CFG, $PDOX;
+// We are being included from src/
+require_once('../dao/QW_DAO.php');
 
 use \QW\DAO\QW_DAO;
 
@@ -108,13 +110,15 @@ $QW_DAO = new QW_DAO($PDOX, $p);
 
 // Get instructor's saved courses from Courses table
 function getCourses($usr) {
-	$response = $QW_DAO->geCourses($usr);
+    global $QW_DAO;
+	$response = $QW_DAO->getCourses($usr);
 
 	return $response;
 }
 
 // for games screen get course name and section
 function getCourseNameSection($id) {
+    global $QW_DAO;
 	$response = $QW_DAO->getCourseNameSection($id);
 	$info = [];
 
@@ -132,6 +136,7 @@ function getCourseNameSection($id) {
 // get course's saved games & info
 // --------------
 function getGames($course) {
+    global $QW_DAO;
 	$response = $QW_DAO->getGames($course);
 	// return the games contained by a specified course
 	// $result = $mysqli->query("SELECT * FROM Games");
@@ -150,6 +155,7 @@ function getGames($course) {
 
 // return the details for a specified game
 function getGameInfo($game) {
+    global $QW_DAO;
 	$response = $QW_DAO->getGameInfo($game);
 	// $result = $mysqli->query('SELECT * FROM Games WHERE id='.$game);
 	return $response;
@@ -165,6 +171,8 @@ function getGameInfo($game) {
 
 // return boolean - game session is "live" (joinable by students) or not 
 function sessionIsLive($id) {
+    global $QW_DAO;
 	// return $mysqli->query('SELECT live FROM Games WHERE id="'.$id.'" LIMIT 1')->fetch_assoc()['live'];
 	return $QW_DAO->sessionIsLive($id);
 }
+

@@ -9,17 +9,19 @@ admin_page.php
 Initially displays courses view. This view displays an instructors saved courses and allows for creating new saved course. Clicking into course goes to games view. This view displays the saved games within a course and allows for 1) creating new saved game within course, 2) deleting the course which in turn deletes all contained games and sends user back to courses view. Clicking into game goes to individual game view. Three options are shown at any point. The first is a toggle switch to start/stop session - this toggles the ability for students to be able to enter into the game and play it. Starting the session will display an id which is to be given to students to join the game. Stopping the session will end ability to join the game and clear the game's data. The second button is dynamic. When session is not live, it is the "Game Setup" button which allows user to view current game configuration as well as make updates and save them. When session is live, it is "View Results" button which redirects to results.php. The third is a delete button which deletes the current game.
 
 */
-	ini_set('display_errors', 1); error_reporting(-1); 
-	include 'utils/sql_settup.php';
-	require_once "../../tsugi/config.php";
+	require_once "../../config.php";
 
 	use \Tsugi\Core\LTIX;
 
 	$LAUNCH = LTIX::session_start();
 
+	include 'utils/sql_settup.php';
+
 	// if student manages to navigate to this page, they will automatically be redirected back to student side
-	if (!$USER->instructor)
-		header("Location: ..");
+	if (!$LAUNCH->user->instructor) {
+		header("Location: ".addSession('student.php'));
+        return;
+    }
 
 	$courses = [];
 	$games = [];
@@ -55,9 +57,7 @@ Initially displays courses view. This view displays an instructors saved courses
 	// different icons for the different types of available games
 	// (currently only econ games supported, but potential to add other types of courses. Maerketing and accounting show as examples)
 	$gameTypeIcons = ["econ"=>"fa-money-bill", "market"=>"fa-chart-line", "account"=>"fa-calculator"];
-?>
-
-<!doctype html>
+?><!doctype html>
 <html class="no-js" lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
