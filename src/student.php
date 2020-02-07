@@ -8,20 +8,20 @@
 
 Last Update:
 */
-ini_set('display_errors', 1); error_reporting(-1); 
-include 'utils/sql_settup.php';
-require_once "../../tsugi/config.php";
+require_once "../../config.php";
 
 use \Tsugi\Core\LTIX;
 
 $LAUNCH = LTIX::session_start();
 
-if ($USER->instructor)
-	header("Location: ..");
+include 'utils/sql_settup.php';
 
-?>
+if ($USER->instructor) {
+	header("Location: ".addSession('admin_page.php'));
+    return;
+}
 
-<!doctype html>
+?><!doctype html>
 <html class="no-js" lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">

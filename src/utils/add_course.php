@@ -8,12 +8,13 @@ Last Update:
 ini_set('display_errors', 1); error_reporting(-1);
 // include 'sql_settup.php';
 require_once "../../../tsugi/config.php";
-require_once('../../dao/QW_DAO.php');
 
 use \Tsugi\Core\LTIX;
-use \QW\DAO\QW_DAO;
 
 $LAUNCH = LTIX::session_start();
+
+require_once('../../dao/QW_DAO.php');
+use \QW\DAO\QW_DAO;
 
 $p = $CFG->dbprefix;
 $QW_DAO = new QW_DAO($PDOX, $p);
